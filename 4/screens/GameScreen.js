@@ -11,7 +11,11 @@ const diceImages = {
     6: require('../assets/dice/6.png'),
 }
 
-export const GameScreen = () => {
+export const GameScreen = ({ onNavigate, player1name, player2name }) => {
+
+    const goBack = () => {
+        onNavigate('Start');
+    }
 
     const [player1Dice, setPlayer1Dice] = useState(1)
     const [player2Dice, setPlayer2Dice] = useState(1)
@@ -39,12 +43,15 @@ export const GameScreen = () => {
         }
 
     }
-// add new screen where you input names and sadamdea tamashi
+// add new screen where you input names and max game score
     return (
         <View style={ {height: '100%' }}>
+            <View style={styles.buttonContainer}>
+                <Button onPress={goBack}>back</Button>
+            </View>
             <View style={styles.container}>
                 <View style={styles.playerWrapper}>
-                    <Text style= {[styles.text, styles.playerLabel]}>Player 1</Text>
+                    <Text style= {[styles.text, styles.playerLabel]}>{player1name}</Text>
                     <Image 
                         style={styles.image}
                         source={diceImages[player1Dice]}>
@@ -55,7 +62,7 @@ export const GameScreen = () => {
                     <Text style={{...styles.text, fontSize: 48}}>VS</Text>
                 </View>
                 <View style={styles.playerWrapper}>
-                    <Text style= {[styles.text, styles.playerLabel]}>Player 2</Text>
+                    <Text style= {[styles.text, styles.playerLabel]}>{player2name}</Text>
                     <Image 
                         style={styles.image}
                         source={diceImages[player2Dice]}>
@@ -71,6 +78,11 @@ export const GameScreen = () => {
 }
 
 const styles = StyleSheet.create({
+    buttonContainer: {
+        marginTop: 40,
+        flexDirection: 'row',
+        marginHorizontal: 10,
+    },
     container: {
         flex: 5,
         flexDirection: 'row',

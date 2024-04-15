@@ -12,6 +12,9 @@ import React, { useState } from 'react';
 SplashScreen.preventAutoHideAsync()
 
 export default function App() {
+
+  const [player1name, setPlayer1name] = useState('');
+  const [player2name, setPlayer2name] = useState('');
   
   const [currentScreen, setCurrentScreen] = useState('Start');
 
@@ -50,9 +53,17 @@ export default function App() {
       >
         <SafeAreaView>
           {currentScreen === 'Start' ? (
-            <StartScreen onNavigate={handleNavigate} />
+            <StartScreen 
+              onNavigate={handleNavigate} 
+              setPlayer1name={setPlayer1name}
+              setPlayer2name={setPlayer2name}
+            />
           ) : (
-            <GameScreen onNavigate={handleNavigate} />
+            <GameScreen 
+              onNavigate={handleNavigate} 
+              player1name={player1name}
+              player2name={player2name}
+            />
           )}
           {/* <GameScreen></GameScreen> */}
           {/* <StartScreen></StartScreen> */}

@@ -1,18 +1,25 @@
 import React from 'react';
 import { useState } from "react"
-import { View, TextInput, Button, Text, StyleSheet } from 'react-native';
+import { Button } from "../components/Button"
+import { View, TextInput, Text, StyleSheet, Alert, Keyboard } from 'react-native';
 
-export const StartScreen = ({ onNavigate }) => {
-  const [player1name, setPlayer1name] = useState('');
-  const [player2name, setPlayer2name] = useState('');
+export const StartScreen = ({ onNavigate, setPlayer1name, setPlayer2name }) => {
+  const [localPlayer1name, setLocalPlayer1name] = useState('');
+  const [localPlayer2name, setLocalPlayer2name] = useState('');
 
   const startGame = () => {
-    if (!player1name || !player2name) {
-      Alert.alert("გთხოვთ შეიყვანოთ ორივე მოთამაშის სახელი!");
+    if (!localPlayer1name || !localPlayer2name) {
+      Alert.alert(
+        'შეცდომა!',
+        `გთხოვთ შეიყვანოთ ორივე მოთამაშის სახელი!`, 
+        [{text: 'გავიგე'}]
+      )
       return;
     }
-    console.log("Start game tapped with Player 1: ", player1name, " and Player 2: ", player2name);
+    console.log("Start game tapped with Player 1: ", localPlayer1name, " and Player 2: ", localPlayer1name);
     Keyboard.dismiss();
+    setPlayer1name(localPlayer1name);
+    setPlayer2name(localPlayer2name);
     onNavigate('Game');
   }
   return (
@@ -20,23 +27,23 @@ export const StartScreen = ({ onNavigate }) => {
       <View style={styles.container}>
         <View style={styles.inputWrapper}>
           <View style={styles.textWrapper}>
-              <Text style={styles.text}>Player 1</Text>
-              <TextInput style={styles.input} 
-                placeholder="Enter Player 1 name"
-                onChangeText={newText => setPlayer1name(newText)}
-                defaultValue={player1name} />
-            </View>
-            <View style={styles.textWrapper}>
-              <Text style={styles.text}>Player 2</Text>
-              <TextInput style={styles.input} 
-                placeholder="Enter Player 2 name" 
-                onChangeText={newText => setPlayer2name(newText)}
-                defaultValue={player2name} />
-            </View>
+            <Text style={styles.text}>Player 1</Text>
+            <TextInput style={styles.input} 
+              placeholder="Enter Player 1 name"
+              onChangeText={newText => setLocalPlayer1name(newText)}
+              defaultValue={localPlayer1name} />
+          </View>
+          <View style={styles.textWrapper}>
+            <Text style={styles.text}>Player 2</Text>
+            <TextInput style={styles.input} 
+              placeholder="Enter Player 2 name" 
+              onChangeText={newText => setLocalPlayer2name(newText)}
+              defaultValue={localPlayer2name} />
           </View>
         </View>
+      </View>
       <View style={styles.button}>
-          <Button title="Start Game" onPress={startGame} />
+        <Button onPress={startGame}>Start Game</Button>
       </View>
     </View>
   );
@@ -74,6 +81,7 @@ const styles = StyleSheet.create({
     // borderColor: 'gray',
     borderWidth: 1,
     paddingHorizontal: 10,
+    borderRadius: 12,
   },
   button: {
     justifyContent: 'center',

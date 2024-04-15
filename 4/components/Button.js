@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         paddingHorizontal: 24,
         paddingVertical: 12,
-        // borderRadius: 12,
+        borderRadius: 12,
         // overflow: 'hidden'
     },
     text: {
