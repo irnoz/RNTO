@@ -3,7 +3,8 @@ import { useState } from "react"
 import { Button } from "../components/Button"
 import { View, TextInput, Text, StyleSheet, Alert, Keyboard } from 'react-native';
 
-export const StartScreen = ({ onNavigate, setPlayer1name, setPlayer2name }) => {
+export const StartScreen = ({ onNavigate, setMaxScore, setPlayer1name, setPlayer2name }) => {
+  const [localMaxScore, seltLocalMaxScore] = useState(4);
   const [localPlayer1name, setLocalPlayer1name] = useState('');
   const [localPlayer2name, setLocalPlayer2name] = useState('');
 
@@ -16,8 +17,9 @@ export const StartScreen = ({ onNavigate, setPlayer1name, setPlayer2name }) => {
       )
       return;
     }
-    console.log("Start game tapped with Player 1: ", localPlayer1name, " and Player 2: ", localPlayer1name);
+    console.log("Start game tapped with Player 1: ", localPlayer1name, " Player 2: ", localPlayer1name, " and Max Score: ", localMaxScore);
     Keyboard.dismiss();
+    setMaxScore(localMaxScore);
     setPlayer1name(localPlayer1name);
     setPlayer2name(localPlayer2name);
     onNavigate('Game');
@@ -25,20 +27,29 @@ export const StartScreen = ({ onNavigate, setPlayer1name, setPlayer2name }) => {
   return (
     <View style={{height: "100%"}}>
       <View style={styles.container}>
-        <View style={styles.inputWrapper}>
-          <View style={styles.textWrapper}>
-            <Text style={styles.text}>Player 1</Text>
-            <TextInput style={styles.input} 
-              placeholder="Enter Player 1 name"
-              onChangeText={newText => setLocalPlayer1name(newText)}
-              defaultValue={localPlayer1name} />
+        <View style={{ flexDirection: 'column', flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <View style={{alignItems: 'center'}}> 
+          <Text style={styles.text}>Max Score</Text>
+              <TextInput style={styles.input} 
+                placeholder="Enter Max Score"
+                onChangeText={newScore => seltLocalMaxScore(newScore)}
+                defaultValue={localMaxScore} />
           </View>
-          <View style={styles.textWrapper}>
-            <Text style={styles.text}>Player 2</Text>
-            <TextInput style={styles.input} 
-              placeholder="Enter Player 2 name" 
-              onChangeText={newText => setLocalPlayer2name(newText)}
-              defaultValue={localPlayer2name} />
+          <View style={styles.inputWrapper}>
+            <View style={styles.textWrapper}>
+              <Text style={styles.text}>Player 1</Text>
+              <TextInput style={styles.input} 
+                placeholder="Enter Player 1 name"
+                onChangeText={newText => setLocalPlayer1name(newText)}
+                defaultValue={localPlayer1name} />
+            </View>
+            <View style={styles.textWrapper}>
+              <Text style={styles.text}>Player 2</Text>
+              <TextInput style={styles.input} 
+                placeholder="Enter Player 2 name" 
+                onChangeText={newText => setLocalPlayer2name(newText)}
+                defaultValue={localPlayer2name} />
+            </View>
           </View>
         </View>
       </View>

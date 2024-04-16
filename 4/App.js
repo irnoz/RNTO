@@ -13,6 +13,7 @@ SplashScreen.preventAutoHideAsync()
 
 export default function App() {
 
+  const [maxScore, setMaxScore] = useState(4)
   const [player1name, setPlayer1name] = useState('');
   const [player2name, setPlayer2name] = useState('');
   
@@ -55,12 +56,14 @@ export default function App() {
           {currentScreen === 'Start' ? (
             <StartScreen 
               onNavigate={handleNavigate} 
+              setMaxScore={setMaxScore}
               setPlayer1name={setPlayer1name}
               setPlayer2name={setPlayer2name}
             />
           ) : (
             <GameScreen 
-              onNavigate={handleNavigate} 
+              onNavigate={handleNavigate}
+              maxScore={maxScore}
               player1name={player1name}
               player2name={player2name}
             />

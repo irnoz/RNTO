@@ -1,17 +1,17 @@
 import { FlatList, View } from "react-native"
-import RenderCategoryItem from '../components/RenderCategoryItem'
-import {Data} from '../data.js'
+import { DATA } from "../data";
+import RenderCategoryItem from "../components/RenderCategoryItem";
 
-const CategoryScreen = () => {
-    // const renderItem = 
+const CategoryScreen = ({navigation}) => {
+
     return (
         <View>
             <FlatList 
-                data={Data} 
-                renderItem={({item}) => <RenderCategoryItem category={item} key={item.id} />}
+                data={DATA} 
+                renderItem={({item}) => <RenderCategoryItem category={item} key={item} />} 
             />
         </View>
     )
 }
 
-export default CategoryScreen
+export default CategoryScreen;

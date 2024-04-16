@@ -1,6 +1,6 @@
 import { View, Image, Text, StyleSheet, Alert } from "react-native" // add Pressable
 import { Button } from "../components/Button"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 const diceImages = {
     1: require('../assets/dice/1.png'),
@@ -11,7 +11,7 @@ const diceImages = {
     6: require('../assets/dice/6.png'),
 }
 
-export const GameScreen = ({ onNavigate, player1name, player2name }) => {
+export const GameScreen = ({ onNavigate, maxScore, player1name, player2name }) => {
 
     const goBack = () => {
         onNavigate('Start');
@@ -22,7 +22,52 @@ export const GameScreen = ({ onNavigate, player1name, player2name }) => {
 
     const [player1Score, setPlayer1Score] = useState(0)
     const [player2Score, setPlayer2Score] = useState(0)
+
+    useEffect(() => {
+        let winner = ""
+        if (player1Score == maxScore) {
+            winner = player1name
+        } else if (player2Score == maxScore) {
+            winner = player2name
+        }
+
+        if (winner != "") {
+
+            Alert.alert(
+                'გილოცავ!',
+                `გამარჯვებულია ${winner}`,
+                [{
+                    text: 'იუჰუუუ',
+                    onPress: () => {
+                        setPlayer1Score(0)
+                        setPlayer2Score(0)
+                    }
+                }]
+            )
+        }
+    }, [player1Score, player2Score, maxScore])
     
+    const checkWinner = () => {
+        let winner = ""
+        if (player1Score == maxScore) {
+            winner = player1name
+        } else if (player2Score == maxScore) {
+            winner = player2name
+        } 
+
+        Alert.alert(
+            'გილოცავ!',
+            `გამარჯვებულია ${winner}`,
+            [{
+                text: 'იუჰუუუ',
+                onPress: () => {
+                    setPlayer1Score(0)
+                    setPlayer2Score(0)
+                }
+            }]
+        )
+    }
+
     const rollDice = () => {
         const dice1Value = Math.floor(Math.random() * 6) + 1
         const dice2Value = Math.floor(Math.random() * 6) + 1
@@ -42,6 +87,7 @@ export const GameScreen = ({ onNavigate, player1name, player2name }) => {
             setPlayer2Score(state => state + 1)
         }
 
+        // checkWinner()
     }
 // add new screen where you input names and max game score
     return (
