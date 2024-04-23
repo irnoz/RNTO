@@ -1,12 +1,30 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useState } from "react"
 import { Button } from "../components/Button"
 import { View, TextInput, Text, StyleSheet, Alert, Keyboard } from 'react-native';
+
+
+
 
 export const StartScreen = ({ onNavigate, setMaxScore, setPlayer1name, setPlayer2name }) => {
   const [localMaxScore, seltLocalMaxScore] = useState(4);
   const [localPlayer1name, setLocalPlayer1name] = useState('');
   const [localPlayer2name, setLocalPlayer2name] = useState('');
+
+  const inputData = useMemo(() => [
+    {
+      text: 'Player 1',
+      placeholder: "Enter Player 1 name",
+      method: setLocalPlayer1name,
+      name: localPlayer1name
+    },
+    {
+      text: 'Player 2',
+      placeholder: "Enter Player 2 name",
+      method: setLocalPlayer2name,
+      name: localPlayer2name
+    },
+  ], [localPlayer1name, localPlayer2name, setLocalPlayer1name, setLocalPlayer2name])
 
   const startGame = () => {
     if (!localPlayer1name || !localPlayer2name) {
@@ -36,20 +54,15 @@ export const StartScreen = ({ onNavigate, setMaxScore, setPlayer1name, setPlayer
                 defaultValue={localMaxScore} />
           </View>
           <View style={styles.inputWrapper}>
-            <View style={styles.textWrapper}>
-              <Text style={styles.text}>Player 1</Text>
-              <TextInput style={styles.input} 
-                placeholder="Enter Player 1 name"
-                onChangeText={newText => setLocalPlayer1name(newText)}
-                defaultValue={localPlayer1name} />
-            </View>
-            <View style={styles.textWrapper}>
-              <Text style={styles.text}>Player 2</Text>
-              <TextInput style={styles.input} 
-                placeholder="Enter Player 2 name" 
-                onChangeText={newText => setLocalPlayer2name(newText)}
-                defaultValue={localPlayer2name} />
-            </View>
+              {
+                inputData.map(data => <View style={styles.textWrapper}>
+                  <Text style={styles.text}>{data.text}</Text>
+                  <TextInput style={styles.input} 
+                    placeholder={data.placeholder}
+                    onChangeText={newText => data.method(newText)}
+                    defaultValue={data.name} />
+                </View>)
+              }
           </View>
         </View>
       </View>
