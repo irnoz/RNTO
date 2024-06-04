@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Button, Image, View, StyleSheet, FlatList, TouchableOpacity, Text } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Contacts from 'expo-contacts';
 
 const App = () => {
   const [image, setImage] = useState(null);
   const [permissionStatus, setPermissionStatus] = useState(null);
   const [savedImages, setSavedImages] = useState([]);
+  const [contacts, setContacts] = useState([]);
 
   useEffect(() => {
     (async () => {
@@ -15,6 +17,13 @@ const App = () => {
       const storedImages = await AsyncStorage.getItem('savedImages');
       if (storedImages) {
         setSavedImages(JSON.parse(storedImages));
+      }
+      const { status: contactStatus } = await Contacts.requestPermissionsAsync();
+      if (contactStatus === 'granted') {
+        const { data } = await Contacts.getContactsAsync({
+          fields: [Contacts.Fields.Name, Contacts.Fields.PhoneNumbers],
+        });
+        setContacts(data);
       }
     })();
   }, []);
@@ -45,18 +54,38 @@ const App = () => {
     </TouchableOpacity>
   );
 
+  const renderContact = ({ item }) => (
+    <View style={styles.contactContainer}>
+      <Text style={styles.contactName}>{item.name}</Text>
+      {item.phoneNumbers &&
+        item.phoneNumbers.map((number, index) => (
+          <Text key={index} style={styles.contactNumber}>
+            {number.number}
+          </Text>
+        ))}
+    </View>
+  );
+
   return (
     <View style={styles.container}>
+      {image && <Image source={{ uri: image }} style={styles.image} />}
+      <View style={styles.savedImagesContainer}>
+        <FlatList
+          data={savedImages}
+          renderItem={renderItem}
+          keyExtractor={(item) => item}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+        />
+      </View>
       <View style={styles.buttonContainer}>
         <Button title="Take Picture" onPress={takePicture} />
       </View>
-      {image && <Image source={{ uri: image }} style={styles.image} />}
       <FlatList
-        data={savedImages}
-        renderItem={renderItem}
-        keyExtractor={(item) => item}
-        horizontal
-        style={styles.savedImagesContainer}
+        data={contacts}
+        renderItem={renderContact}
+        keyExtractor={(item) => item.id}
+        style={styles.contactsList}
       />
     </View>
   );
@@ -66,24 +95,45 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
+    paddingHorizontal: 20,
+    paddingTop: 50,
   },
   buttonContainer: {
-    paddingTop: 80,
+    paddingBottom: 20,
   },
   image: {
     width: 300,
     height: 300,
-    marginTop: 20,
+    marginBottom: 20,
   },
   savedImagesContainer: {
-    marginTop: 20,
-    height: 100,
+    // marginBottom: 5,
+    width: '100%',
+    height: 120,
   },
   savedImage: {
     width: 100,
     height: 100,
     marginRight: 10,
+  },
+  contactsList: {
+    marginTop: 20,
+    width: '100%',
+    padding: 10,
+  },
+  contactContainer: {
+    backgroundColor: '#f0f0f0',
+    padding: 10,
+    marginBottom: 10,
+    borderRadius: 5,
+  },
+  contactName: {
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  contactNumber: {
+    fontSize: 14,
   },
 });
 
