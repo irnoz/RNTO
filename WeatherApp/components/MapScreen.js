@@ -12,7 +12,7 @@ const MapScreen = ({ route, navigation }) => {
     (async () => {
       try {
         if (city) {
-          const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=268f02be83100313a9ed7e4991342e38`);
+          const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=not_available`);
           const data = await response.json();
           const { lat, lon } = data.coord;
           setLocation({ latitude: lat, longitude: lon });

@@ -8,7 +8,7 @@ const WeatherScreen = ({ route }) => {
 
   useEffect(() => {
     if (location) {
-      axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${location.latitude}&lon=${location.longitude}&appid=268f02be83100313a9ed7e4991342e38`)
+      axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${location.latitude}&lon=${location.longitude}&appid=not_available`)
         .then(response => {
           setWeather(response.data);
         })
